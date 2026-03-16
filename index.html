@@ -2227,18 +2227,22 @@
 
   <!-- ─── SCRIPTS ─── -->
   <script>
-  (function() {
+  document.addEventListener('DOMContentLoaded', function() {
+  try {
     'use strict';
 
     // ─── GSAP SETUP ───
+    if (typeof gsap === 'undefined') { console.warn('GSAP not loaded'); return; }
     gsap.registerPlugin(ScrollTrigger);
 
     // ─── CUSTOM CURSOR ───
+    try {
     const dot  = document.getElementById('cursor-dot');
     const ring = document.getElementById('cursor-ring');
     let mouseX = 0, mouseY = 0;
     let ringX  = 0, ringY  = 0;
 
+    if (dot && ring) {
     document.addEventListener('mousemove', e => {
       mouseX = e.clientX;
       mouseY = e.clientY;
@@ -2251,6 +2255,8 @@
       gsap.set(ring, { x: ringX, y: ringY });
       requestAnimationFrame(animateRing);
     })();
+    }
+    } catch(e) { console.warn('Cursor init failed:', e); }
 
     document.querySelectorAll('a, button, .filter-btn, .portfolio-item, .service-card').forEach(el => {
       el.addEventListener('mouseenter', () => document.body.classList.add('cursor-hover'));
@@ -2566,5 +2572,17 @@
       duration: 0.7,
       stagger: 0.08,
       ease: 'power3.out',
+      scrollTrigger: { trigger: '.portfolio-grid', start: 'top 85%' }
+    });
+
+  } catch(e) {
+    console.warn('JS Error:', e);
+    // Ensure loader is hidden even if JS fails
+    const loader = document.getElementById('loader');
+    if (loader) loader.style.display = 'none';
+    document.body.classList.remove('loading');
+  }
+  }); // end DOMContentLoaded
+  </script>
 </body>
 </html>
