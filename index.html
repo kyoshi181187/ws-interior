@@ -2264,6 +2264,14 @@
     const loaderBar  = document.getElementById('loaderBar');
     const loaderWrap = loader.querySelector('.loader-bar-wrap');
 
+    // Fallback: force dismiss loader after 5s if animation fails
+    setTimeout(() => {
+      if (loader && loader.style.display !== 'none') {
+        loader.style.display = 'none';
+        document.body.classList.remove('loading');
+      }
+    }, 5000);
+
     const tl = gsap.timeline({
       onComplete: () => {
         gsap.to(loader, {
