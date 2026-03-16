@@ -1,0 +1,2860 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>WS Interior Design & Build — Jakarta · Bogor</title>
+  <meta name="description" content="WS Interior Design & Build — Studio desain interior premium Jakarta-Bogor sejak 2015. Design, Build, Renovasi, Konsultasi, 3D Visualisasi." />
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Inter:wght@300;400;500;600&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&display=swap" rel="stylesheet" />
+
+  <!-- GSAP -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+
+  <style>
+    /* ─────────────────────────────────────────────
+       RESET & BASE
+    ───────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --beige:    #F5F0E8;
+      --cream:    #FAFAF7;
+      --gray:     #8B8680;
+      --taupe:    #C4B9A8;
+      --gold:     #C9A96E;
+      --gold-lt:  #E2C992;
+      --dark:     #2C2C2C;
+      --darker:   #1A1A1A;
+      --white:    #FFFFFF;
+      --font-serif: 'Playfair Display', Georgia, serif;
+      --font-sans:  'Inter', system-ui, sans-serif;
+      --font-light: 'Cormorant Garamond', Georgia, serif;
+      --ease-smooth: cubic-bezier(0.76, 0, 0.24, 1);
+      --ease-out:    cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    html { scroll-behavior: auto; font-size: 16px; }
+
+    body {
+      font-family: var(--font-sans);
+      background: var(--cream);
+      color: var(--dark);
+      overflow-x: hidden;
+      cursor: none;
+    }
+
+    body.loading { overflow: hidden; }
+
+    ::selection { background: var(--gold); color: var(--white); }
+
+    img { display: block; max-width: 100%; }
+
+    a { text-decoration: none; color: inherit; }
+
+    /* ─────────────────────────────────────────────
+       CUSTOM CURSOR
+    ───────────────────────────────────────────── */
+    #cursor-dot,
+    #cursor-ring {
+      position: fixed;
+      pointer-events: none;
+      z-index: 9999;
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      transition: opacity 0.3s ease;
+    }
+
+    #cursor-dot {
+      width: 6px;
+      height: 6px;
+      background: var(--gold);
+      top: 0; left: 0;
+    }
+
+    #cursor-ring {
+      width: 36px;
+      height: 36px;
+      border: 1px solid rgba(201,169,110,0.6);
+      top: 0; left: 0;
+      transition: width 0.3s var(--ease-smooth),
+                  height 0.3s var(--ease-smooth),
+                  border-color 0.3s ease,
+                  background 0.3s ease;
+    }
+
+    body:hover #cursor-dot,
+    body:hover #cursor-ring { opacity: 1; }
+
+    body.cursor-hover #cursor-ring {
+      width: 56px;
+      height: 56px;
+      border-color: var(--gold);
+      background: rgba(201,169,110,0.08);
+    }
+
+    /* ─────────────────────────────────────────────
+       LOADER
+    ───────────────────────────────────────────── */
+    #loader {
+      position: fixed;
+      inset: 0;
+      background: var(--darker);
+      z-index: 9000;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2rem;
+    }
+
+    .loader-logo {
+      font-family: var(--font-serif);
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      color: var(--white);
+      letter-spacing: 0.12em;
+      opacity: 0;
+      transform: translateY(20px);
+    }
+
+    .loader-logo span {
+      color: var(--gold);
+    }
+
+    .loader-tagline {
+      font-family: var(--font-light);
+      font-style: italic;
+      font-size: 0.95rem;
+      color: var(--taupe);
+      letter-spacing: 0.2em;
+      opacity: 0;
+      transform: translateY(10px);
+    }
+
+    .loader-bar-wrap {
+      width: 120px;
+      height: 1px;
+      background: rgba(255,255,255,0.1);
+      overflow: hidden;
+      opacity: 0;
+    }
+
+    .loader-bar {
+      height: 100%;
+      width: 0%;
+      background: var(--gold);
+      transition: width 1.6s var(--ease-smooth);
+    }
+
+    /* ─────────────────────────────────────────────
+       NAV
+    ───────────────────────────────────────────── */
+    #nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 800;
+      padding: 1.6rem 4rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      transition: background 0.5s ease,
+                  padding 0.4s ease,
+                  box-shadow 0.5s ease;
+    }
+
+    #nav.scrolled {
+      background: rgba(250,250,247,0.95);
+      backdrop-filter: blur(12px);
+      padding: 1rem 4rem;
+      box-shadow: 0 1px 40px rgba(0,0,0,0.06);
+    }
+
+    .nav-logo {
+      font-family: var(--font-serif);
+      font-size: 1.25rem;
+      color: var(--white);
+      letter-spacing: 0.08em;
+      transition: color 0.4s ease;
+    }
+
+    .nav-logo span { color: var(--gold); }
+
+    #nav.scrolled .nav-logo { color: var(--dark); }
+
+    .nav-links {
+      display: flex;
+      gap: 2.5rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-size: 0.78rem;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.85);
+      position: relative;
+      transition: color 0.3s ease;
+    }
+
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: -3px; left: 0;
+      width: 0; height: 1px;
+      background: var(--gold);
+      transition: width 0.3s var(--ease-smooth);
+    }
+
+    .nav-links a:hover::after,
+    .nav-links a.active::after { width: 100%; }
+
+    #nav.scrolled .nav-links a { color: var(--dark); }
+
+    .nav-cta {
+      font-size: 0.78rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 0.65rem 1.5rem;
+      border: 1px solid rgba(255,255,255,0.5);
+      color: var(--white);
+      transition: all 0.3s ease;
+    }
+
+    .nav-cta:hover {
+      background: var(--gold);
+      border-color: var(--gold);
+      color: var(--white);
+    }
+
+    #nav.scrolled .nav-cta {
+      border-color: var(--dark);
+      color: var(--dark);
+    }
+
+    #nav.scrolled .nav-cta:hover {
+      background: var(--gold);
+      border-color: var(--gold);
+      color: var(--white);
+    }
+
+    /* Hamburger */
+    .nav-hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: none;
+      padding: 4px;
+    }
+
+    .nav-hamburger span {
+      display: block;
+      width: 24px;
+      height: 1px;
+      background: var(--white);
+      transition: all 0.3s ease;
+    }
+
+    #nav.scrolled .nav-hamburger span { background: var(--dark); }
+
+    /* Mobile nav */
+    .mobile-menu {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: var(--darker);
+      z-index: 790;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2rem;
+    }
+
+    .mobile-menu.open { display: flex; }
+
+    .mobile-menu a {
+      font-family: var(--font-serif);
+      font-size: 2rem;
+      color: var(--white);
+      letter-spacing: 0.05em;
+    }
+
+    .mobile-menu a:hover { color: var(--gold); }
+
+    /* ─────────────────────────────────────────────
+       HERO
+    ───────────────────────────────────────────── */
+    #hero {
+      position: relative;
+      height: 100vh;
+      min-height: 700px;
+      display: flex;
+      align-items: flex-end;
+      overflow: hidden;
+    }
+
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      background-image: url('https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=1600&q=80');
+      background-size: cover;
+      background-position: center;
+      transform-origin: center;
+      will-change: transform;
+    }
+
+    .hero-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        to top,
+        rgba(26,26,26,0.85) 0%,
+        rgba(26,26,26,0.3) 50%,
+        rgba(26,26,26,0.15) 100%
+      );
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      padding: 0 4rem 6rem;
+      max-width: 900px;
+    }
+
+    .hero-eyebrow {
+      font-family: var(--font-sans);
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 1.5rem;
+      overflow: hidden;
+    }
+
+    .hero-eyebrow-inner {
+      display: block;
+      transform: translateY(100%);
+      opacity: 0;
+    }
+
+    .hero-title {
+      font-family: var(--font-serif);
+      font-size: clamp(2.8rem, 6vw, 5.5rem);
+      font-weight: 400;
+      line-height: 1.08;
+      color: var(--white);
+      margin-bottom: 1.8rem;
+    }
+
+    .word-wrap {
+      overflow: hidden;
+      display: inline-block;
+      margin-right: 0.25em;
+    }
+
+    .word {
+      display: inline-block;
+      transform: translateY(110%);
+      opacity: 0;
+    }
+
+    .hero-subtitle {
+      font-family: var(--font-light);
+      font-style: italic;
+      font-size: clamp(1rem, 1.8vw, 1.25rem);
+      color: rgba(255,255,255,0.7);
+      max-width: 480px;
+      line-height: 1.7;
+      margin-bottom: 2.5rem;
+      overflow: hidden;
+    }
+
+    .hero-subtitle-inner {
+      display: block;
+      transform: translateY(100%);
+      opacity: 0;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 1.2rem;
+      align-items: center;
+      overflow: hidden;
+    }
+
+    .hero-actions-inner {
+      display: flex;
+      gap: 1.2rem;
+      align-items: center;
+      transform: translateY(40px);
+      opacity: 0;
+    }
+
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      padding: 0.9rem 2.2rem;
+      background: var(--gold);
+      color: var(--white);
+      font-size: 0.8rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      transition: all 0.35s var(--ease-smooth);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn-primary::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: var(--gold-lt);
+      transform: translateX(-100%);
+      transition: transform 0.4s var(--ease-smooth);
+    }
+
+    .btn-primary:hover::before { transform: translateX(0); }
+
+    .btn-primary span { position: relative; z-index: 1; }
+
+    .btn-outline {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.9rem 2rem;
+      border: 1px solid rgba(255,255,255,0.45);
+      color: var(--white);
+      font-size: 0.8rem;
+      font-weight: 400;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      transition: all 0.35s ease;
+    }
+
+    .btn-outline:hover {
+      border-color: var(--white);
+      background: rgba(255,255,255,0.08);
+    }
+
+    .hero-scroll-hint {
+      position: absolute;
+      bottom: 2.5rem;
+      right: 4rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+      color: rgba(255,255,255,0.5);
+      font-size: 0.65rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      z-index: 2;
+      opacity: 0;
+    }
+
+    .scroll-line {
+      width: 1px;
+      height: 50px;
+      background: rgba(255,255,255,0.2);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .scroll-line::after {
+      content: '';
+      position: absolute;
+      top: -100%;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: var(--gold);
+      animation: scrollDown 2s ease infinite;
+    }
+
+    @keyframes scrollDown {
+      0%   { top: -100%; }
+      100% { top: 100%; }
+    }
+
+    /* ─────────────────────────────────────────────
+       SECTION BASE
+    ───────────────────────────────────────────── */
+    section { position: relative; }
+
+    .section-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 4rem;
+    }
+
+    .section-label {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      font-size: 0.7rem;
+      font-weight: 500;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 1.2rem;
+    }
+
+    .section-label::before {
+      content: '';
+      display: block;
+      width: 40px;
+      height: 1px;
+      background: var(--gold);
+    }
+
+    .section-title {
+      font-family: var(--font-serif);
+      font-size: clamp(2rem, 4vw, 3.2rem);
+      font-weight: 400;
+      line-height: 1.15;
+      color: var(--dark);
+    }
+
+    .section-title em {
+      font-style: italic;
+      color: var(--gold);
+    }
+
+    /* Reveal animations */
+    .reveal {
+      opacity: 0;
+      transform: translateY(50px);
+      transition: opacity 0.9s var(--ease-out),
+                  transform 0.9s var(--ease-out);
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .reveal-delay-1 { transition-delay: 0.1s; }
+    .reveal-delay-2 { transition-delay: 0.2s; }
+    .reveal-delay-3 { transition-delay: 0.35s; }
+    .reveal-delay-4 { transition-delay: 0.5s; }
+    .reveal-delay-5 { transition-delay: 0.65s; }
+
+    .reveal-left {
+      opacity: 0;
+      transform: translateX(-50px);
+      transition: opacity 0.9s var(--ease-out),
+                  transform 0.9s var(--ease-out);
+    }
+
+    .reveal-left.visible {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    .reveal-right {
+      opacity: 0;
+      transform: translateX(50px);
+      transition: opacity 0.9s var(--ease-out),
+                  transform 0.9s var(--ease-out);
+    }
+
+    .reveal-right.visible {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    /* ─────────────────────────────────────────────
+       MARQUEE STRIP
+    ───────────────────────────────────────────── */
+    .marquee-strip {
+      background: var(--dark);
+      padding: 1.1rem 0;
+      overflow: hidden;
+      white-space: nowrap;
+    }
+
+    .marquee-track {
+      display: inline-flex;
+      gap: 2rem;
+      animation: marqueeRoll 22s linear infinite;
+    }
+
+    .marquee-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 1.5rem;
+      font-size: 0.7rem;
+      font-weight: 500;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--taupe);
+    }
+
+    .marquee-dot {
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      background: var(--gold);
+      display: inline-block;
+      flex-shrink: 0;
+    }
+
+    @keyframes marqueeRoll {
+      from { transform: translateX(0); }
+      to   { transform: translateX(-50%); }
+    }
+
+    /* ─────────────────────────────────────────────
+       ABOUT
+    ───────────────────────────────────────────── */
+    #about {
+      padding: 10rem 0;
+      background: var(--cream);
+    }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6rem;
+      align-items: center;
+    }
+
+    .about-images {
+      position: relative;
+      height: 580px;
+    }
+
+    .about-img-main {
+      position: absolute;
+      top: 0; left: 0;
+      width: 78%;
+      height: 88%;
+      object-fit: cover;
+      box-shadow: 0 30px 80px rgba(0,0,0,0.12);
+    }
+
+    .about-img-accent {
+      position: absolute;
+      bottom: 0; right: 0;
+      width: 50%;
+      height: 48%;
+      object-fit: cover;
+      border: 5px solid var(--cream);
+      box-shadow: 0 20px 60px rgba(0,0,0,0.12);
+    }
+
+    .about-year-badge {
+      position: absolute;
+      top: 40%;
+      right: -20px;
+      background: var(--gold);
+      color: var(--white);
+      padding: 1.2rem 1.4rem;
+      text-align: center;
+      box-shadow: 0 10px 40px rgba(201,169,110,0.4);
+      z-index: 2;
+    }
+
+    .about-year-badge strong {
+      display: block;
+      font-family: var(--font-serif);
+      font-size: 1.8rem;
+      font-weight: 500;
+      line-height: 1;
+    }
+
+    .about-year-badge span {
+      font-size: 0.65rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      opacity: 0.85;
+    }
+
+    .about-text { padding-top: 1rem; }
+
+    .about-desc {
+      font-size: 1rem;
+      line-height: 1.85;
+      color: var(--gray);
+      margin: 1.8rem 0 1.4rem;
+    }
+
+    .about-desc-2 {
+      font-family: var(--font-light);
+      font-size: 1.3rem;
+      line-height: 1.65;
+      color: var(--dark);
+      font-style: italic;
+      border-left: 2px solid var(--gold);
+      padding-left: 1.5rem;
+      margin-bottom: 2.5rem;
+    }
+
+    .about-signature {
+      font-family: var(--font-light);
+      font-style: italic;
+      font-size: 1.5rem;
+      color: var(--taupe);
+      letter-spacing: 0.05em;
+    }
+
+    /* ─────────────────────────────────────────────
+       STATS
+    ───────────────────────────────────────────── */
+    #stats {
+      padding: 5rem 0;
+      background: var(--dark);
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0;
+      border-left: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .stat-item {
+      padding: 2.5rem 2rem;
+      text-align: center;
+      border-right: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .stat-number {
+      font-family: var(--font-serif);
+      font-size: clamp(2.5rem, 4vw, 3.5rem);
+      font-weight: 400;
+      color: var(--white);
+      line-height: 1;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      gap: 0;
+    }
+
+    .stat-number .suffix {
+      font-size: 1.5rem;
+      color: var(--gold);
+      margin-top: 0.3rem;
+    }
+
+    .stat-label {
+      font-size: 0.72rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--taupe);
+      margin-top: 0.7rem;
+    }
+
+    /* ─────────────────────────────────────────────
+       SERVICES
+    ───────────────────────────────────────────── */
+    #services {
+      padding: 10rem 0;
+      background: var(--beige);
+    }
+
+    .services-header {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      margin-bottom: 5rem;
+      align-items: end;
+    }
+
+    .services-intro {
+      font-size: 0.95rem;
+      line-height: 1.8;
+      color: var(--gray);
+    }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0;
+      border: 1px solid rgba(0,0,0,0.08);
+    }
+
+    .service-card {
+      padding: 2.8rem 2.2rem;
+      border-right: 1px solid rgba(0,0,0,0.08);
+      background: var(--beige);
+      transition: background 0.4s ease, transform 0.4s var(--ease-smooth);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .service-card:last-child { border-right: none; }
+
+    .service-card::before {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 0;
+      background: var(--dark);
+      transition: height 0.5s var(--ease-smooth);
+      z-index: 0;
+    }
+
+    .service-card:hover::before { height: 100%; }
+
+    .service-card > * { position: relative; z-index: 1; }
+
+    .service-icon {
+      width: 48px;
+      height: 48px;
+      margin-bottom: 1.8rem;
+      transition: filter 0.4s ease;
+    }
+
+    .service-icon svg {
+      width: 100%;
+      height: 100%;
+      stroke: var(--gold);
+      fill: none;
+      stroke-width: 1.2;
+    }
+
+    .service-num {
+      font-family: var(--font-serif);
+      font-size: 0.8rem;
+      color: var(--taupe);
+      margin-bottom: 0.8rem;
+      transition: color 0.4s ease;
+    }
+
+    .service-card:hover .service-num { color: rgba(255,255,255,0.4); }
+
+    .service-name {
+      font-family: var(--font-serif);
+      font-size: 1.3rem;
+      font-weight: 500;
+      color: var(--dark);
+      margin-bottom: 1rem;
+      transition: color 0.4s ease;
+    }
+
+    .service-card:hover .service-name { color: var(--white); }
+
+    .service-desc {
+      font-size: 0.85rem;
+      line-height: 1.75;
+      color: var(--gray);
+      transition: color 0.4s ease;
+    }
+
+    .service-card:hover .service-desc { color: rgba(255,255,255,0.65); }
+
+    .service-arrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-top: 1.5rem;
+      font-size: 0.72rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--gold);
+      transition: gap 0.3s ease, color 0.4s ease;
+    }
+
+    .service-card:hover .service-arrow { gap: 0.8rem; color: var(--gold-lt); }
+
+    /* ─────────────────────────────────────────────
+       PORTFOLIO
+    ───────────────────────────────────────────── */
+    #portfolio {
+      padding: 10rem 0;
+      background: var(--cream);
+    }
+
+    .portfolio-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      margin-bottom: 3rem;
+    }
+
+    .portfolio-filters {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .filter-btn {
+      padding: 0.5rem 1.2rem;
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      border: 1px solid rgba(0,0,0,0.12);
+      background: transparent;
+      color: var(--gray);
+      cursor: none;
+      transition: all 0.3s ease;
+    }
+
+    .filter-btn.active,
+    .filter-btn:hover {
+      background: var(--dark);
+      border-color: var(--dark);
+      color: var(--white);
+    }
+
+    .portfolio-grid {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 1rem;
+    }
+
+    .portfolio-item {
+      position: relative;
+      overflow: hidden;
+      background: var(--taupe);
+    }
+
+    /* First item spans wide for visual anchor */
+    .portfolio-item:nth-child(1) { grid-column: span 7; grid-row: span 2; aspect-ratio: auto; }
+    .portfolio-item:nth-child(2) { grid-column: span 5; }
+    .portfolio-item:nth-child(3) { grid-column: span 5; }
+    /* Remaining items: balanced 4-col layout */
+    .portfolio-item:nth-child(4)  { grid-column: span 4; }
+    .portfolio-item:nth-child(5)  { grid-column: span 4; }
+    .portfolio-item:nth-child(6)  { grid-column: span 4; }
+    .portfolio-item:nth-child(7)  { grid-column: span 6; }
+    .portfolio-item:nth-child(8)  { grid-column: span 6; }
+    .portfolio-item:nth-child(9)  { grid-column: span 4; }
+    .portfolio-item:nth-child(10) { grid-column: span 4; }
+    .portfolio-item:nth-child(11) { grid-column: span 4; }
+    .portfolio-item:nth-child(12) { grid-column: span 6; }
+    .portfolio-item:nth-child(13) { grid-column: span 6; }
+    .portfolio-item:nth-child(14) { grid-column: span 4; }
+    .portfolio-item:nth-child(15) { grid-column: span 4; }
+    .portfolio-item:nth-child(16) { grid-column: span 4; }
+    .portfolio-item:nth-child(17) { grid-column: span 6; }
+    .portfolio-item:nth-child(18) { grid-column: span 6; }
+    .portfolio-item:nth-child(19) { grid-column: span 4; }
+    .portfolio-item:nth-child(20) { grid-column: span 4; }
+    .portfolio-item:nth-child(21) { grid-column: span 4; }
+    .portfolio-item:nth-child(22) { grid-column: span 6; }
+    .portfolio-item:nth-child(23) { grid-column: span 6; }
+    .portfolio-item:nth-child(24) { grid-column: span 4; }
+    .portfolio-item:nth-child(25) { grid-column: span 4; }
+    .portfolio-item:nth-child(26) { grid-column: span 4; }
+    .portfolio-item:nth-child(27) { grid-column: span 6; }
+    .portfolio-item:nth-child(28) { grid-column: span 6; }
+    .portfolio-item:nth-child(29) { grid-column: span 4; }
+    .portfolio-item:nth-child(30) { grid-column: span 4; }
+    .portfolio-item:nth-child(31) { grid-column: span 4; }
+    .portfolio-item:nth-child(32) { grid-column: span 6; }
+    .portfolio-item:nth-child(33) { grid-column: span 6; }
+
+    .portfolio-item.hidden {
+      display: none;
+    }
+
+    .portfolio-img {
+      width: 100%;
+      height: 100%;
+      min-height: 260px;
+      object-fit: cover;
+      transform-origin: center;
+      transition: transform 0.8s var(--ease-smooth);
+    }
+
+    .portfolio-item:nth-child(1) .portfolio-img { min-height: 540px; }
+
+    .portfolio-item:hover .portfolio-img { transform: scale(1.08); }
+
+    .portfolio-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        to top,
+        rgba(26,26,26,0.88) 0%,
+        rgba(26,26,26,0.1) 60%,
+        transparent 100%
+      );
+      opacity: 0;
+      transition: opacity 0.5s ease;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 1.8rem;
+    }
+
+    .portfolio-item:hover .portfolio-overlay { opacity: 1; }
+
+    .portfolio-tag {
+      font-size: 0.65rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 0.4rem;
+      transform: translateY(15px);
+      transition: transform 0.5s var(--ease-smooth) 0.05s;
+    }
+
+    .portfolio-item:hover .portfolio-tag { transform: translateY(0); }
+
+    .portfolio-name {
+      font-family: var(--font-serif);
+      font-size: 1.1rem;
+      color: var(--white);
+      transform: translateY(15px);
+      transition: transform 0.5s var(--ease-smooth) 0.1s;
+    }
+
+    .portfolio-item:hover .portfolio-name { transform: translateY(0); }
+
+    /* ─────────────────────────────────────────────
+       WHY US
+    ───────────────────────────────────────────── */
+    #why-us {
+      padding: 10rem 0;
+      background: var(--dark);
+      overflow: hidden;
+    }
+
+    .why-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6rem;
+      align-items: center;
+    }
+
+    .why-image-wrap {
+      position: relative;
+    }
+
+    .why-image-wrap img {
+      width: 100%;
+      height: 620px;
+      object-fit: cover;
+    }
+
+    .why-img-tag {
+      position: absolute;
+      bottom: -1.5rem;
+      right: -1.5rem;
+      background: var(--gold);
+      padding: 2rem;
+      font-family: var(--font-serif);
+      font-style: italic;
+      font-size: 1.1rem;
+      color: var(--white);
+      max-width: 220px;
+      line-height: 1.5;
+      z-index: 2;
+    }
+
+    .why-text .section-title { color: var(--white); }
+    .why-text .section-label { margin-top: 0; }
+
+    .why-items {
+      margin-top: 3rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+
+    .why-item {
+      display: flex;
+      gap: 1.5rem;
+      align-items: flex-start;
+      padding: 1.8rem 0;
+      border-bottom: 1px solid rgba(255,255,255,0.07);
+      transition: all 0.35s ease;
+    }
+
+    .why-item:first-child { border-top: 1px solid rgba(255,255,255,0.07); }
+
+    .why-item:hover { padding-left: 0.5rem; }
+
+    .why-item-num {
+      font-family: var(--font-serif);
+      font-size: 0.85rem;
+      color: var(--gold);
+      flex-shrink: 0;
+      width: 28px;
+      padding-top: 0.15rem;
+    }
+
+    .why-item-content { flex: 1; }
+
+    .why-item-title {
+      font-family: var(--font-serif);
+      font-size: 1.15rem;
+      color: var(--white);
+      margin-bottom: 0.5rem;
+    }
+
+    .why-item-desc {
+      font-size: 0.87rem;
+      line-height: 1.75;
+      color: rgba(255,255,255,0.5);
+    }
+
+    /* ─────────────────────────────────────────────
+       TESTIMONIALS
+    ───────────────────────────────────────────── */
+    #testimonials {
+      padding: 10rem 0;
+      background: var(--beige);
+    }
+
+    .testimonials-header {
+      text-align: center;
+      margin-bottom: 5rem;
+    }
+
+    .testimonials-header .section-label {
+      justify-content: center;
+    }
+
+    .testimonials-header .section-label::before { display: none; }
+
+    .testimonials-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+    }
+
+    .testimonial-card {
+      background: var(--white);
+      padding: 2.8rem;
+      position: relative;
+      transition: transform 0.4s var(--ease-smooth),
+                  box-shadow 0.4s ease;
+    }
+
+    .testimonial-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 30px 70px rgba(0,0,0,0.1);
+    }
+
+    .testi-quote {
+      position: absolute;
+      top: 2rem; right: 2.5rem;
+      font-family: var(--font-serif);
+      font-size: 5rem;
+      color: var(--taupe);
+      line-height: 1;
+      opacity: 0.25;
+      user-select: none;
+    }
+
+    .testi-stars {
+      display: flex;
+      gap: 3px;
+      margin-bottom: 1.5rem;
+    }
+
+    .testi-stars span {
+      color: var(--gold);
+      font-size: 0.85rem;
+    }
+
+    .testi-text {
+      font-family: var(--font-light);
+      font-style: italic;
+      font-size: 1.05rem;
+      line-height: 1.75;
+      color: var(--dark);
+      margin-bottom: 2rem;
+    }
+
+    .testi-author {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .testi-avatar {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: var(--taupe);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-serif);
+      font-size: 1rem;
+      color: var(--white);
+      flex-shrink: 0;
+    }
+
+    .testi-name {
+      font-weight: 600;
+      font-size: 0.9rem;
+      color: var(--dark);
+    }
+
+    .testi-role {
+      font-size: 0.78rem;
+      color: var(--gray);
+      margin-top: 0.15rem;
+    }
+
+    /* ─────────────────────────────────────────────
+       CONTACT
+    ───────────────────────────────────────────── */
+    #contact {
+      padding: 10rem 0;
+      background: var(--cream);
+    }
+
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1.3fr;
+      gap: 6rem;
+    }
+
+    .contact-info { }
+
+    .contact-tagline {
+      font-family: var(--font-serif);
+      font-size: clamp(1.6rem, 3vw, 2.4rem);
+      font-weight: 400;
+      line-height: 1.3;
+      color: var(--dark);
+      margin: 1.5rem 0 2rem;
+    }
+
+    .contact-tagline em { color: var(--gold); font-style: italic; }
+
+    .contact-details {
+      display: flex;
+      flex-direction: column;
+      gap: 1.2rem;
+      margin-bottom: 2.5rem;
+    }
+
+    .contact-detail {
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+    }
+
+    .contact-detail-icon {
+      width: 18px;
+      height: 18px;
+      flex-shrink: 0;
+      margin-top: 0.1rem;
+    }
+
+    .contact-detail-icon svg {
+      width: 100%;
+      height: 100%;
+      stroke: var(--gold);
+      fill: none;
+      stroke-width: 1.5;
+    }
+
+    .contact-detail-text {
+      font-size: 0.9rem;
+      line-height: 1.6;
+      color: var(--gray);
+    }
+
+    .contact-detail-text strong {
+      display: block;
+      font-weight: 600;
+      color: var(--dark);
+      font-size: 0.8rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 0.2rem;
+    }
+
+    .btn-whatsapp {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.95rem 2rem;
+      background: #25D366;
+      color: var(--white);
+      font-size: 0.82rem;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      transition: all 0.35s ease;
+      box-shadow: 0 8px 30px rgba(37,211,102,0.3);
+    }
+
+    .btn-whatsapp:hover {
+      background: #1fba59;
+      transform: translateY(-2px);
+      box-shadow: 0 12px 40px rgba(37,211,102,0.4);
+    }
+
+    .btn-whatsapp svg {
+      width: 18px;
+      height: 18px;
+      fill: var(--white);
+    }
+
+    /* Contact Form */
+    .contact-form {
+      display: flex;
+      flex-direction: column;
+      gap: 1.2rem;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.2rem;
+    }
+
+    .form-field {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .form-field label {
+      font-size: 0.7rem;
+      font-weight: 500;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--dark);
+    }
+
+    .form-field input,
+    .form-field select,
+    .form-field textarea {
+      padding: 0.9rem 1.1rem;
+      border: 1px solid rgba(0,0,0,0.12);
+      background: var(--white);
+      font-family: var(--font-sans);
+      font-size: 0.9rem;
+      color: var(--dark);
+      outline: none;
+      transition: border-color 0.3s ease, box-shadow 0.3s ease;
+      cursor: none;
+      -webkit-appearance: none;
+      appearance: none;
+    }
+
+    .form-field select {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%238B8680' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 1rem center;
+      padding-right: 2.5rem;
+    }
+
+    .form-field input:focus,
+    .form-field select:focus,
+    .form-field textarea:focus {
+      border-color: var(--gold);
+      box-shadow: 0 0 0 3px rgba(201,169,110,0.1);
+    }
+
+    .form-field textarea { resize: vertical; min-height: 120px; }
+
+    .form-submit {
+      align-self: flex-start;
+      padding: 1rem 2.5rem;
+      background: var(--dark);
+      color: var(--white);
+      font-family: var(--font-sans);
+      font-size: 0.8rem;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      border: none;
+      cursor: none;
+      transition: all 0.35s var(--ease-smooth);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .form-submit::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: var(--gold);
+      transform: translateX(-101%);
+      transition: transform 0.4s var(--ease-smooth);
+    }
+
+    .form-submit:hover::before { transform: translateX(0); }
+
+    .form-submit span { position: relative; z-index: 1; }
+
+    /* ─────────────────────────────────────────────
+       PARALLAX BG SECTION
+    ───────────────────────────────────────────── */
+    .parallax-banner {
+      position: relative;
+      height: 480px;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .parallax-banner-bg {
+      position: absolute;
+      inset: -80px;
+      background-image: url('https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?w=1600&q=80');
+      background-size: cover;
+      background-position: center;
+      will-change: transform;
+    }
+
+    .parallax-banner-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(26,26,26,0.72);
+    }
+
+    .parallax-banner-content {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+      padding: 0 2rem;
+    }
+
+    .parallax-banner-content p {
+      font-family: var(--font-light);
+      font-style: italic;
+      font-size: clamp(1.4rem, 3vw, 2.2rem);
+      color: var(--white);
+      line-height: 1.55;
+      max-width: 700px;
+      margin: 0 auto 0.6rem;
+    }
+
+    .parallax-banner-content cite {
+      font-size: 0.75rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gold);
+    }
+
+    /* ─────────────────────────────────────────────
+       FOOTER
+    ───────────────────────────────────────────── */
+    #footer {
+      background: var(--darker);
+      padding: 5rem 0 2rem;
+    }
+
+    .footer-top {
+      display: grid;
+      grid-template-columns: 1.5fr 1fr 1fr 1fr;
+      gap: 3rem;
+      padding-bottom: 3.5rem;
+      border-bottom: 1px solid rgba(255,255,255,0.07);
+      margin-bottom: 2rem;
+    }
+
+    .footer-brand .nav-logo {
+      font-size: 1.3rem;
+      display: block;
+      margin-bottom: 1rem;
+    }
+
+    .footer-brand p {
+      font-size: 0.85rem;
+      line-height: 1.75;
+      color: rgba(255,255,255,0.4);
+      max-width: 260px;
+    }
+
+    .footer-social {
+      display: flex;
+      gap: 0.7rem;
+      margin-top: 1.8rem;
+    }
+
+    .social-link {
+      width: 36px;
+      height: 36px;
+      border: 1px solid rgba(255,255,255,0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: rgba(255,255,255,0.5);
+      font-size: 0.8rem;
+      transition: all 0.3s ease;
+    }
+
+    .social-link:hover {
+      border-color: var(--gold);
+      color: var(--gold);
+      background: rgba(201,169,110,0.08);
+    }
+
+    .footer-col h4 {
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--white);
+      margin-bottom: 1.4rem;
+    }
+
+    .footer-col ul {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .footer-col ul li a {
+      font-size: 0.85rem;
+      color: rgba(255,255,255,0.4);
+      transition: color 0.3s ease;
+    }
+
+    .footer-col ul li a:hover { color: var(--gold); }
+
+    .footer-bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .footer-copy {
+      font-size: 0.78rem;
+      color: rgba(255,255,255,0.3);
+    }
+
+    .footer-copy span { color: var(--gold); }
+
+    .footer-legal {
+      display: flex;
+      gap: 1.5rem;
+    }
+
+    .footer-legal a {
+      font-size: 0.78rem;
+      color: rgba(255,255,255,0.3);
+      transition: color 0.3s ease;
+    }
+
+    .footer-legal a:hover { color: var(--white); }
+
+    /* ─────────────────────────────────────────────
+       FLOATING WHATSAPP
+    ───────────────────────────────────────────── */
+    #wa-float {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      z-index: 500;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 0.75rem;
+    }
+
+    .wa-tooltip {
+      background: var(--dark);
+      color: var(--white);
+      font-size: 0.78rem;
+      padding: 0.5rem 1rem;
+      white-space: nowrap;
+      opacity: 0;
+      transform: translateX(10px);
+      transition: all 0.3s ease;
+      pointer-events: none;
+    }
+
+    #wa-float:hover .wa-tooltip {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    .wa-btn {
+      width: 52px;
+      height: 52px;
+      background: #25D366;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 6px 24px rgba(37,211,102,0.45);
+      transition: all 0.3s var(--ease-smooth);
+    }
+
+    .wa-btn:hover {
+      transform: scale(1.12);
+      box-shadow: 0 10px 36px rgba(37,211,102,0.55);
+    }
+
+    .wa-btn svg {
+      width: 26px;
+      height: 26px;
+      fill: var(--white);
+    }
+
+    .wa-pulse {
+      position: absolute;
+      inset: -4px;
+      border-radius: 50%;
+      border: 2px solid rgba(37,211,102,0.4);
+      animation: waPulse 2s ease infinite;
+    }
+
+    @keyframes waPulse {
+      0%   { transform: scale(1);   opacity: 1; }
+      100% { transform: scale(1.5); opacity: 0; }
+    }
+
+    /* ─────────────────────────────────────────────
+       RESPONSIVE
+    ───────────────────────────────────────────── */
+    @media (max-width: 1024px) {
+      .section-inner { padding: 0 2.5rem; }
+      #nav { padding: 1.4rem 2.5rem; }
+      #nav.scrolled { padding: 0.9rem 2.5rem; }
+      .hero-content { padding: 0 2.5rem 5rem; }
+      .hero-scroll-hint { right: 2.5rem; }
+
+      .about-grid { gap: 3.5rem; }
+      .services-grid { grid-template-columns: repeat(2, 1fr); }
+      .service-card:nth-child(2) { border-right: none; }
+      .service-card:nth-child(3) { border-top: 1px solid rgba(0,0,0,0.08); }
+      .service-card:nth-child(4) { border-top: 1px solid rgba(0,0,0,0.08); border-right: none; }
+      .stats-grid { grid-template-columns: repeat(2, 1fr); }
+      .why-grid { gap: 4rem; }
+      .testimonials-grid { grid-template-columns: 1fr 1fr; }
+      .testimonials-grid .testimonial-card:nth-child(3) { grid-column: span 2; }
+      .contact-grid { gap: 3.5rem; }
+      .footer-top { grid-template-columns: 1.5fr 1fr 1fr; }
+      .footer-top > div:last-child { grid-column: span 2; }
+    }
+
+    @media (max-width: 768px) {
+      .nav-links, .nav-cta { display: none; }
+      .nav-hamburger { display: flex; }
+      #nav { padding: 1.2rem 1.5rem; }
+      #nav.scrolled { padding: 0.8rem 1.5rem; }
+      .hero-content { padding: 0 1.5rem 4rem; }
+      .hero-scroll-hint { display: none; }
+      .section-inner { padding: 0 1.5rem; }
+
+      #about { padding: 6rem 0; }
+      .about-grid { grid-template-columns: 1fr; }
+      .about-images { height: 380px; }
+      .about-year-badge { right: 0.5rem; }
+
+      #stats { padding: 4rem 0; }
+      .stats-grid { grid-template-columns: repeat(2, 1fr); }
+
+      #services { padding: 6rem 0; }
+      .services-header { grid-template-columns: 1fr; gap: 1.5rem; margin-bottom: 3rem; }
+      .services-grid { grid-template-columns: 1fr 1fr; }
+
+      .portfolio-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 0.6rem;
+      }
+      .portfolio-item { grid-column: span 1 !important; grid-row: span 1 !important; }
+      .portfolio-item .portfolio-img { min-height: 200px !important; }
+
+      .portfolio-header { flex-direction: column; align-items: flex-start; gap: 1.5rem; }
+      .portfolio-filters { flex-wrap: wrap; }
+
+      #why-us { padding: 6rem 0; }
+      .why-grid { grid-template-columns: 1fr; gap: 3rem; }
+      .why-image-wrap img { height: 380px; }
+      .why-img-tag { right: 0; bottom: -1rem; }
+
+      #testimonials { padding: 6rem 0; }
+      .testimonials-grid { grid-template-columns: 1fr; }
+      .testimonials-grid .testimonial-card:nth-child(3) { grid-column: span 1; }
+
+      #contact { padding: 6rem 0; }
+      .contact-grid { grid-template-columns: 1fr; gap: 3rem; }
+      .form-row { grid-template-columns: 1fr; }
+
+      .parallax-banner { height: 320px; }
+
+      #footer { padding: 4rem 0 2rem; }
+      .footer-top { grid-template-columns: 1fr; gap: 2rem; }
+      .footer-top > div:last-child { grid-column: span 1; }
+      .footer-bottom { flex-direction: column; gap: 0.8rem; text-align: center; }
+      .footer-legal { justify-content: center; }
+    }
+
+    @media (max-width: 480px) {
+      .services-grid { grid-template-columns: 1fr; }
+      .service-card { border-right: none; border-bottom: 1px solid rgba(0,0,0,0.08); }
+      .hero-actions-inner { flex-direction: column; align-items: flex-start; }
+    }
+  </style>
+</head>
+
+<body class="loading">
+
+  <!-- CURSOR -->
+  <div id="cursor-dot"></div>
+  <div id="cursor-ring"></div>
+
+  <!-- LOADER -->
+  <div id="loader">
+    <div class="loader-logo">WS <span>Interior</span></div>
+    <div class="loader-tagline">Design & Build</div>
+    <div class="loader-bar-wrap">
+      <div class="loader-bar" id="loaderBar"></div>
+    </div>
+  </div>
+
+  <!-- NAV -->
+  <nav id="nav">
+    <a href="#" class="nav-logo">WS <span>Interior</span></a>
+    <ul class="nav-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#services">Services</a></li>
+      <li><a href="#portfolio">Portfolio</a></li>
+      <li><a href="#why-us">Why Us</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+    <a href="#contact" class="nav-cta">Konsultasi Gratis</a>
+    <div class="nav-hamburger" id="hamburger">
+      <span></span><span></span><span></span>
+    </div>
+  </nav>
+
+  <!-- MOBILE MENU -->
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="#about"       onclick="closeMobile()">About</a>
+    <a href="#services"    onclick="closeMobile()">Services</a>
+    <a href="#portfolio"   onclick="closeMobile()">Portfolio</a>
+    <a href="#why-us"      onclick="closeMobile()">Why Us</a>
+    <a href="#testimonials" onclick="closeMobile()">Testimoni</a>
+    <a href="#contact"     onclick="closeMobile()">Contact</a>
+  </div>
+
+  <!-- HERO -->
+  <section id="hero">
+    <div class="hero-bg" id="heroBg"></div>
+    <div class="hero-overlay"></div>
+
+    <div class="hero-content">
+      <div class="hero-eyebrow">
+        <span class="hero-eyebrow-inner">Jakarta · Bogor · Est. 2015</span>
+      </div>
+
+      <h1 class="hero-title" id="heroTitle">
+        <!-- Words injected by JS -->
+      </h1>
+
+      <div class="hero-subtitle">
+        <span class="hero-subtitle-inner">
+          "Simplicity is the key note of all true elegance."
+        </span>
+      </div>
+
+      <div class="hero-actions">
+        <div class="hero-actions-inner" id="heroActions">
+          <a href="#portfolio" class="btn-primary">
+            <span>Lihat Portfolio</span>
+            <span>→</span>
+          </a>
+          <a href="#contact" class="btn-outline">Konsultasi Gratis</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero-scroll-hint" id="heroScrollHint">
+      <span>Scroll</span>
+      <div class="scroll-line"></div>
+    </div>
+  </section>
+
+  <!-- MARQUEE -->
+  <div class="marquee-strip">
+    <div class="marquee-track" id="marqueeTrack">
+      <!-- duplicated by JS -->
+    </div>
+  </div>
+
+  <!-- ABOUT -->
+  <section id="about">
+    <div class="section-inner">
+      <div class="about-grid">
+        <div class="about-images reveal-left">
+          <img class="about-img-main"
+            src="https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?w=800&q=80"
+            alt="WS Interior Design — Living Room" loading="lazy" />
+          <img class="about-img-accent"
+            src="https://images.unsplash.com/photo-1595526114035-0d45ed16cfbe?w=800&q=80"
+            alt="WS Interior Design — Bedroom" loading="lazy" />
+          <div class="about-year-badge">
+            <strong>10+</strong>
+            <span>Tahun Pengalaman</span>
+          </div>
+        </div>
+
+        <div class="about-text">
+          <div class="section-label reveal">Tentang Kami</div>
+          <h2 class="section-title reveal reveal-delay-1">
+            Studio Desain Interior <em>Premium</em> Jakarta–Bogor
+          </h2>
+          <p class="about-desc reveal reveal-delay-2">
+            Sejak 2015, WS Interior Design & Build telah membantu ratusan klien mewujudkan ruang impian mereka. Kami percaya bahwa setiap ruang menceritakan kisah penghuninya — dan kami hadir untuk memastikan kisah itu indah, fungsional, dan penuh makna.
+          </p>
+          <blockquote class="about-desc-2 reveal reveal-delay-3">
+            "Your design to be possible — kami mengubah visi Anda menjadi kenyataan yang melampaui ekspektasi."
+          </blockquote>
+          <div class="about-signature reveal reveal-delay-4">WS Interior Design & Build</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- STATS -->
+  <section id="stats">
+    <div class="section-inner">
+      <div class="stats-grid">
+        <div class="stat-item reveal">
+          <div class="stat-number">
+            <span class="count" data-target="10">0</span>
+            <span class="suffix">+</span>
+          </div>
+          <div class="stat-label">Tahun Pengalaman</div>
+        </div>
+        <div class="stat-item reveal reveal-delay-1">
+          <div class="stat-number">
+            <span class="count" data-target="200">0</span>
+            <span class="suffix">+</span>
+          </div>
+          <div class="stat-label">Proyek Selesai</div>
+        </div>
+        <div class="stat-item reveal reveal-delay-2">
+          <div class="stat-number">
+            <span class="count" data-target="150">0</span>
+            <span class="suffix">+</span>
+          </div>
+          <div class="stat-label">Klien Puas</div>
+        </div>
+        <div class="stat-item reveal reveal-delay-3">
+          <div class="stat-number">
+            <span class="count" data-target="5">0</span>
+            <span class="suffix">★</span>
+          </div>
+          <div class="stat-label">Rating Rata-rata</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVICES -->
+  <section id="services">
+    <div class="section-inner">
+      <div class="services-header">
+        <div>
+          <div class="section-label reveal">Layanan Kami</div>
+          <h2 class="section-title reveal reveal-delay-1">
+            End-to-End <em>Interior</em><br/>Solutions
+          </h2>
+        </div>
+        <p class="services-intro reveal reveal-delay-2">
+          Dari konsep awal hingga finishing akhir, kami menangani semua aspek desain dan pembangunan interior Anda. Satu studio, satu visi, satu hasil yang sempurna.
+        </p>
+      </div>
+
+      <div class="services-grid">
+        <div class="service-card reveal">
+          <div class="service-icon">
+            <svg viewBox="0 0 48 48"><rect x="6" y="6" width="36" height="28" rx="2"/><line x1="6" y1="18" x2="42" y2="18"/><line x1="18" y1="34" x2="18" y2="42"/><line x1="30" y1="34" x2="30" y2="42"/><line x1="12" y1="42" x2="36" y2="42"/></svg>
+          </div>
+          <div class="service-num">01</div>
+          <h3 class="service-name">Desain Interior</h3>
+          <p class="service-desc">Konsep desain interior yang disesuaikan dengan kepribadian dan gaya hidup Anda. Dari minimalis modern hingga klasik elegan.</p>
+          <div class="service-arrow">Selengkapnya <span>→</span></div>
+        </div>
+
+        <div class="service-card reveal reveal-delay-1">
+          <div class="service-icon">
+            <svg viewBox="0 0 48 48"><path d="M8 36L8 20L24 10L40 20V36"/><path d="M18 36V26H30V36"/><line x1="8" y1="20" x2="4" y2="22"/><line x1="40" y1="20" x2="44" y2="22"/></svg>
+          </div>
+          <div class="service-num">02</div>
+          <h3 class="service-name">Build & Renovasi</h3>
+          <p class="service-desc">Eksekusi pembangunan dan renovasi dengan standar kualitas tinggi. Tim berpengalaman siap mewujudkan desain menjadi realita.</p>
+          <div class="service-arrow">Selengkapnya <span>→</span></div>
+        </div>
+
+        <div class="service-card reveal reveal-delay-2">
+          <div class="service-icon">
+            <svg viewBox="0 0 48 48"><circle cx="24" cy="20" r="8"/><path d="M12 40c0-6.627 5.373-12 12-12s12 5.373 12 12"/><line x1="36" y1="10" x2="42" y2="8"/><line x1="38" y1="16" x2="44" y2="16"/><line x1="36" y1="22" x2="42" y2="24"/></svg>
+          </div>
+          <div class="service-num">03</div>
+          <h3 class="service-name">Konsultasi Interior</h3>
+          <p class="service-desc">Sesi konsultasi personal dengan desainer berpengalaman. Dapatkan insight profesional untuk ruang Anda tanpa biaya awal.</p>
+          <div class="service-arrow">Selengkapnya <span>→</span></div>
+        </div>
+
+        <div class="service-card reveal reveal-delay-3">
+          <div class="service-icon">
+            <svg viewBox="0 0 48 48"><rect x="4" y="8" width="40" height="28" rx="2"/><path d="M16 36L12 44M32 36L36 44"/><line x1="8" y1="44" x2="40" y2="44"/><rect x="10" y="14" width="28" height="16" rx="1" stroke-dasharray="3 2"/></svg>
+          </div>
+          <div class="service-num">04</div>
+          <h3 class="service-name">3D Visualisasi</h3>
+          <p class="service-desc">Visualisasi 3D photorealistic untuk melihat hasil akhir sebelum eksekusi. Pastikan setiap detail sesuai dengan ekspektasi Anda.</p>
+          <div class="service-arrow">Selengkapnya <span>→</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PORTFOLIO -->
+  <section id="portfolio">
+    <div class="section-inner">
+      <div class="portfolio-header">
+        <div>
+          <div class="section-label reveal">Karya Kami</div>
+          <h2 class="section-title reveal reveal-delay-1">Portfolio <em>Terpilih</em></h2>
+        </div>
+        <div class="portfolio-filters reveal">
+          <button class="filter-btn active" data-filter="all">Semua</button>
+          <button class="filter-btn" data-filter="bedroom">Bedroom</button>
+          <button class="filter-btn" data-filter="living">Living Room</button>
+          <button class="filter-btn" data-filter="kitchen">Kitchen</button>
+          <button class="filter-btn" data-filter="dining">Dining</button>
+          <button class="filter-btn" data-filter="wardrobe">Wardrobe</button>
+          <button class="filter-btn" data-filter="theater">Theater</button>
+          <button class="filter-btn" data-filter="office">Office</button>
+        </div>
+      </div>
+
+      <div class="portfolio-grid" id="portfolioGrid">
+        <!-- LIVING ROOM (8 photos) -->
+        <div class="portfolio-item" data-category="living">
+          <img class="portfolio-img" src="https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=1600&q=80" alt="Living Room Modern WS Interior" loading="lazy" />
+          <div class="portfolio-overlay">
+            <div class="portfolio-tag">Living Room</div>
+            <div class="portfolio-name">Residensial Bogor Hills</div>
+          </div>
+        </div>
+
+        <div class="portfolio-item" data-category="living">
+          <img class="portfolio-img" src="https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?w=800&q=80" alt="Living Room Elegant WS Interior" loading="lazy" />
+          <div class="portfolio-overlay">
+            <div class="portfolio-tag">Living Room</div>
+            <div class="portfolio-name">Apartemen Sudirman</div>
+          </div>
+        </div>
+
+        <div class="portfolio-item" data-category="living">
+          <img class="portfolio-img" src="https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?w=1600&q=80" alt="Living Room Contemporary WS Interior" loading="lazy" />
+          <div class="portfolio-overlay">
+            <div class="portfolio-tag">Living Room</div>
+            <div class="portfolio-name">Ruang Keluarga BSD City</div>
+          </div>
+        </div>
+
+        <div class="portfolio-item" data-category="living">
+          <img class="portfolio-img" src="https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=800&q=80" alt="Living Room Minimalist WS Interior" loading="lazy" />
+          <div class="portfolio-overlay">
+            <div class="portfolio-tag">Living Room</div>
+            <div class="portfolio-name">Villa Sentul Premium</div>
+          </div>
+        </div>
+
+        <div class="portfolio-item" data-category="living">
+          <img class="portfolio-img" src="https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=800&q=80" alt="Living Room Luxury WS Interior" loading="lazy" />
+          <div class="portfolio-overlay">
+            <div class="portfolio-tag">Living Room</div>
+            <div class="portfolio-name">Townhouse Kemang</div>
+          </div>
+        </div>
+
+        <div class="portfolio-item" data-category="living">
+          <img class="portfolio-img" src="https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=800&q=80" alt="Living Room Classic WS Interior" loading="lazy" />
+          <div class="portfolio-overlay">
+            <div class="portfolio-tag">Living Room</div>
+            <div class="portfolio-name">Residensial Cinere</div>
+          </div>
+        </div>
+
+        <div class="portfolio-item" data-category="living">
+          <img class="portfolio-img" src="https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=800&q=80" alt="Living Room Modern Classic WS Interior" loading="lazy" />
+          <div class="portfolio-overlay">
+            <div class="portfolio-tag">Living Room</div>
+            <div class="portfolio-name">Perumahan Cibubur</div>
+          </div>
+        </div>
+
+        <div class="portfolio-item" data-category="living">
+          <img class="portfolio-img" src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=800&q=80" alt="Living Room Open Plan WS Interior" loading="lazy" />
+          <div class="portfolio-overlay">
+            <div class="portfolio-tag">Living Room</div>
+            <div class="portfolio-name">Apartemen Kelapa Gading</div>
+          </div>
+        </div>
+
+        <!-- BEDROOM (8 photos) -->
+        <div class="portfolio-item" data-category="bedroom">
+          <img class="portfolio-img" src="https://images.unsplash.com/photo-1615529182904-14819c35db37?w=800&q=80" alt="Master Bedroom WS Interior" loading="lazy" />
+          <div class="portfolio-overlay">
+            <div class="portfolio-tag">Bedroom</div>
+            <div class="portfolio-name">Master Suite Kemang</div>
+          </div>
+        </div>
+
+        <div class="portfolio-item" data-category="bedroom">
+          <img class="portfolio-img" src="https://images.unsplash.com/photo-1595526114035-0d45ed16cfbe?w=800&q=80" alt="Bedroom Minimalist WS Interior" loading="lazy" />
+          <div class="portfolio-overlay">
+            <div class="portfolio-tag">Bedroom</div>
+            <div class="portfolio-name">Kamar Utama Sentul</div>
+          </div>
+        </div>
+
+        <div class="portfolio-item" data-category="bedroom">
+          <img class="portfolio-img" src="https://images.unsplash.com/photo-1583847268964-b28dc8f51f92?w=800&q=80" alt="Bedroom Modern WS Interior" loading="lazy" />
+          <div class="portfolio-overlay">
+            <div class="portfolio-tag">Bedroom</div>
+            <div class="portfolio-name">Kamar Anak Cibubur</div>
+          </div>
+        </div>
+
+        <div class="portfolio-item" data-category="bedroom">
+          <img class="portfolio-img" src="https://images.unsplash.com/photo-1560448204-603b3fc33ddc?w=800&q=80" alt="Bedroom Luxury WS Interior" loading="lazy" />
+          <div class="portfolio-overlay">
+            <div class="portfolio-tag">Bedroom</div>
+            <div class="portfolio-name">Suite Utama BSD</div>
+          </div>
+        </div>
+
+        <div class="portfolio-item" data-category="bedroom">
+          <img class="portfolio-img" src="https://images.unsplash.com/photo-1615529182904-14819c35db37?w=800&q=80" alt="Bedroom Cozy WS Interior" loading="lazy" />
+          <div class="portfolio-overlay">
+            <div class="portfolio-tag">Bedroom</div>
+            <div class="portfolio-name">Kamar Bogor Hills</div>
+          </div>
+        </div>
+
+        <div class="portfolio-item" data-category="bedroom">
+          <img class="portfolio-img" src="https://images.unsplash.com/photo-1583847268964-b28dc8f51f92?w=800&q=80" alt="Bedroom Elegant WS Interior" loading="lazy" />
+          <div class="portfolio-overlay">
+            <div class="portfolio-tag">Bedroom</div>
+            <div class="portfolio-name">Master Room Depok</div>
+          </div>
+        </div>
+
+        <div class="portfolio-item" data-category="bedroom">
+          <img class="portfolio-img" src="https://images.unsplash.com/photo-1560448204-603b3fc33ddc?w=800&q=80" alt="Bedroom Contemporary WS Interior" loading="lazy" />
+          <div class="portfolio-overlay">
+            <div class="portfolio-tag">Bedroom</div>
+            <div class="portfolio-name">Suite Apartemen Sudirman</div>
+          </div>
+        </div>
+
+        <div class="portfolio-item" data-category="bedroom">
+          <img class="portfolio-img" src="https://images.unsplash.com/photo-1615529182904-14819c35db37?w=800&q=80" alt="Bedroom Premium WS Interior" loading="lazy" />
+          <div class="portfolio-overlay">
+            <div class="portfolio-tag">Bedroom</div>
+            <div class="portfolio-name">Kamar VIP Kelapa Gading</div>
+          </div>
+        </div>
+
+        <!-- KITCHEN (4 photos) -->
+        <div class="portfolio-item" data-category="kitchen">
+          <img class="portfolio-img" src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=800&q=80" alt="Kitchen Modern WS Interior" loading="lazy" />
+          <div class="portfolio-overlay">
+            <div class="portfolio-tag">Kitchen</div>
+            <div class="portfolio-name">Dapur Modern Sentul</div>
+          </div>
+        </div>
+
+        <div class="portfolio-item" data-category="kitchen">
+          <img class="portfolio-img" src="https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=800&q=80" alt="Kitchen Minimalist WS Interior" loading="lazy" />
+          <div class="portfolio-overlay">
+            <div class="portfolio-tag">Kitchen</div>
+            <div class="portfolio-name">Dapur Minimalis BSD</div>
+          </div>
+        </div>
+
+        <div class="portfolio-item" data-category="kitchen">
+          <img class="portfolio-img" src="https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=800&q=80" alt="Kitchen Contemporary WS Interior" loading="lazy" />
+          <div class="portfolio-overlay">
+            <div class="portfolio-tag">Kitchen</div>
+            <div class="portfolio-name">Open Kitchen Kemang</div>
+          </div>
+        </div>
+
+        <div class="portfolio-item" data-category="kitchen">
+          <img class="portfolio-img" src="https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=800&q=80" alt="Kitchen Premium WS Interior" loading="lazy" />
+          <div class="portfolio-overlay">
+            <div class="portfolio-tag">Kitchen</div>
+            <div class="portfolio-name">Kitchen Set Premium Bogor</div>
+          </div>
+        </div>
+
+        <!-- DINING (4 photos) -->
+        <div class="portfolio-item" data-category="dining">
+          <img class="portfolio-img" src="https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=800&q=80" alt="Dining Room WS Interior" loading="lazy" />
+          <div class="portfolio-overlay">
+            <div class="portfolio-tag">Dining</div>
+            <div class="portfolio-name">Ruang Makan Depok</div>
+          </div>
+        </div>
+
+        <div class="portfolio-item" data-category="dining">
+          <img class="portfolio-img" src="https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=800&q=80" alt="Dining Room Elegant WS Interior" loading="lazy" />
+          <div class="portfolio-overlay">
+            <div class="portfolio-tag">Dining</div>
+            <div class="portfolio-name">Dining Area Cinere</div>
+          </div>
+        </div>
+
+        <div class="portfolio-item" data-category="dining">
+          <img class="portfolio-img" src="https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=800&q=80" alt="Dining Room Modern WS Interior" loading="lazy" />
+          <div class="portfolio-overlay">
+            <div class="portfolio-tag">Dining</div>
+            <div class="portfolio-name">Ruang Makan BSD City</div>
+          </div>
+        </div>
+
+        <div class="portfolio-item" data-category="dining">
+          <img class="portfolio-img" src="https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=800&q=80" alt="Dining Room Premium WS Interior" loading="lazy" />
+          <div class="portfolio-overlay">
+            <div class="portfolio-tag">Dining</div>
+            <div class="portfolio-name">Dining Set Bogor Hills</div>
+          </div>
+        </div>
+
+        <!-- WARDROBE (3 photos) -->
+        <div class="portfolio-item" data-category="wardrobe">
+          <img class="portfolio-img" src="https://images.unsplash.com/photo-1560448204-603b3fc33ddc?w=800&q=80" alt="Wardrobe Custom WS Interior" loading="lazy" />
+          <div class="portfolio-overlay">
+            <div class="portfolio-tag">Wardrobe</div>
+            <div class="portfolio-name">Walk-in Closet Kemang</div>
+          </div>
+        </div>
+
+        <div class="portfolio-item" data-category="wardrobe">
+          <img class="portfolio-img" src="https://images.unsplash.com/photo-1560448204-603b3fc33ddc?w=800&q=80" alt="Wardrobe Minimalist WS Interior" loading="lazy" />
+          <div class="portfolio-overlay">
+            <div class="portfolio-tag">Wardrobe</div>
+            <div class="portfolio-name">Lemari Built-in BSD</div>
+          </div>
+        </div>
+
+        <div class="portfolio-item" data-category="wardrobe">
+          <img class="portfolio-img" src="https://images.unsplash.com/photo-1560448204-603b3fc33ddc?w=800&q=80" alt="Wardrobe Premium WS Interior" loading="lazy" />
+          <div class="portfolio-overlay">
+            <div class="portfolio-tag">Wardrobe</div>
+            <div class="portfolio-name">Closet Premium Sentul</div>
+          </div>
+        </div>
+
+        <!-- THEATER (2 photos) -->
+        <div class="portfolio-item" data-category="theater">
+          <img class="portfolio-img" src="https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=800&q=80" alt="Home Theater WS Interior" loading="lazy" />
+          <div class="portfolio-overlay">
+            <div class="portfolio-tag">Theater</div>
+            <div class="portfolio-name">Home Theater Bogor Hills</div>
+          </div>
+        </div>
+
+        <div class="portfolio-item" data-category="theater">
+          <img class="portfolio-img" src="https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=800&q=80" alt="Home Theater Premium WS Interior" loading="lazy" />
+          <div class="portfolio-overlay">
+            <div class="portfolio-tag">Theater</div>
+            <div class="portfolio-name">Private Cinema Sentul</div>
+          </div>
+        </div>
+
+        <!-- OFFICE (2 photos) -->
+        <div class="portfolio-item" data-category="office">
+          <img class="portfolio-img" src="https://images.unsplash.com/photo-1595526114035-0d45ed16cfbe?w=800&q=80" alt="Home Office WS Interior" loading="lazy" />
+          <div class="portfolio-overlay">
+            <div class="portfolio-tag">Office</div>
+            <div class="portfolio-name">Home Office Kemang</div>
+          </div>
+        </div>
+
+        <div class="portfolio-item" data-category="office">
+          <img class="portfolio-img" src="https://images.unsplash.com/photo-1595526114035-0d45ed16cfbe?w=800&q=80" alt="Office Modern WS Interior" loading="lazy" />
+          <div class="portfolio-overlay">
+            <div class="portfolio-tag">Office</div>
+            <div class="portfolio-name">Ruang Kerja Sentul</div>
+          </div>
+        </div>
+
+        <!-- BATHROOM (1 photo) -->
+        <div class="portfolio-item" data-category="bathroom">
+          <img class="portfolio-img" src="https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?w=800&q=80" alt="Bathroom Luxury WS Interior" loading="lazy" />
+          <div class="portfolio-overlay">
+            <div class="portfolio-tag">Bathroom</div>
+            <div class="portfolio-name">Kamar Mandi Premium BSD</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PARALLAX BANNER -->
+  <div class="parallax-banner">
+    <div class="parallax-banner-bg" id="parallaxBanner"></div>
+    <div class="parallax-banner-overlay"></div>
+    <div class="parallax-banner-content">
+      <p class="reveal">"Simplicity is the key note of all true elegance."</p>
+      <cite class="reveal reveal-delay-1">— Coco Chanel</cite>
+    </div>
+  </div>
+
+  <!-- WHY US -->
+  <section id="why-us">
+    <div class="section-inner">
+      <div class="why-grid">
+        <div class="why-image-wrap reveal-left">
+          <img src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=800&q=80"
+               alt="WS Interior — Kitchen Craftsmanship" loading="lazy" />
+          <div class="why-img-tag">
+            "Setiap detail adalah karya seni tersendiri."
+          </div>
+        </div>
+
+        <div class="why-text">
+          <div class="section-label reveal">Keunggulan Kami</div>
+          <h2 class="section-title reveal reveal-delay-1">Mengapa Memilih <em>WS Interior?</em></h2>
+
+          <div class="why-items">
+            <div class="why-item reveal reveal-delay-1">
+              <div class="why-item-num">01</div>
+              <div class="why-item-content">
+                <h3 class="why-item-title">10+ Tahun Pengalaman</h3>
+                <p class="why-item-desc">Portofolio lebih dari 200 proyek residensial dan komersial di Jakarta dan Bogor sejak 2015.</p>
+              </div>
+            </div>
+
+            <div class="why-item reveal reveal-delay-2">
+              <div class="why-item-num">02</div>
+              <div class="why-item-content">
+                <h3 class="why-item-title">Layanan End-to-End</h3>
+                <p class="why-item-desc">Dari konsep, desain 3D, hingga build & finishing — semuanya ditangani oleh satu tim terpadu.</p>
+              </div>
+            </div>
+
+            <div class="why-item reveal reveal-delay-3">
+              <div class="why-item-num">03</div>
+              <div class="why-item-content">
+                <h3 class="why-item-title">Material Premium</h3>
+                <p class="why-item-desc">Hanya menggunakan material berkualitas tinggi dari supplier terpercaya, dengan garansi pengerjaan.</p>
+              </div>
+            </div>
+
+            <div class="why-item reveal reveal-delay-4">
+              <div class="why-item-num">04</div>
+              <div class="why-item-content">
+                <h3 class="why-item-title">Tepat Waktu & Transparan</h3>
+                <p class="why-item-desc">Komitmen penuh pada timeline yang disepakati dengan laporan progres rutin dan biaya yang transparan.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TESTIMONIALS -->
+  <section id="testimonials">
+    <div class="section-inner">
+      <div class="testimonials-header">
+        <div class="section-label">Testimoni</div>
+        <h2 class="section-title reveal">Apa Kata <em>Klien Kami</em></h2>
+      </div>
+
+      <div class="testimonials-grid">
+        <div class="testimonial-card reveal">
+          <div class="testi-quote">"</div>
+          <div class="testi-stars">
+            <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
+          </div>
+          <p class="testi-text">WS Interior benar-benar mengubah rumah kami menjadi surga. Setiap detail diperhatikan dengan sangat baik, dari pemilihan warna hingga pencahayaan. Hasilnya jauh melampaui ekspektasi kami!</p>
+          <div class="testi-author">
+            <div class="testi-avatar">RW</div>
+            <div>
+              <div class="testi-name">Riana Wijaya</div>
+              <div class="testi-role">Homeowner · Cinere, Jakarta Selatan</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="testimonial-card reveal reveal-delay-1">
+          <div class="testi-quote">"</div>
+          <div class="testi-stars">
+            <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
+          </div>
+          <p class="testi-text">Tim WS sangat profesional dan komunikatif. Renovasi kantor kami selesai tepat waktu dan hasilnya elegan banget. Klien-klien kami selalu terpesona setiap kali datang ke kantor.</p>
+          <div class="testi-author">
+            <div class="testi-avatar">DA</div>
+            <div>
+              <div class="testi-name">Dimas Ardianto</div>
+              <div class="testi-role">Business Owner · Sentul, Bogor</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="testimonial-card reveal reveal-delay-2">
+          <div class="testi-quote">"</div>
+          <div class="testi-stars">
+            <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
+          </div>
+          <p class="testi-text">Konsultasi awal gratis dan sangat membantu. Mereka benar-benar mendengarkan kebutuhan kami dan memberikan solusi kreatif yang sesuai budget. Sangat recommended untuk siapa saja!</p>
+          <div class="testi-author">
+            <div class="testi-avatar">SN</div>
+            <div>
+              <div class="testi-name">Sari Nurhayati</div>
+              <div class="testi-role">Homeowner · Bogor Utara</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact">
+    <div class="section-inner">
+      <div class="contact-grid">
+        <div class="contact-info">
+          <div class="section-label reveal">Hubungi Kami</div>
+          <h2 class="contact-tagline reveal reveal-delay-1">
+            Mulai Wujudkan<br/><em>Ruang Impian Anda</em>
+          </h2>
+          <p class="about-desc reveal reveal-delay-2" style="margin: 0 0 2rem;">
+            Konsultasi pertama gratis. Ceritakan visi Anda, dan kami akan membantu merancang ruang yang sempurna.
+          </p>
+
+          <div class="contact-details reveal reveal-delay-3">
+            <div class="contact-detail">
+              <div class="contact-detail-icon"><svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
+              <div class="contact-detail-text">
+                <strong>Lokasi</strong>
+                Jakarta — Bogor, Jawa Barat
+              </div>
+            </div>
+            <div class="contact-detail">
+              <div class="contact-detail-icon"><svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></div>
+              <div class="contact-detail-text">
+                <strong>Email</strong>
+                wdnbuild@gmail.com
+              </div>
+            </div>
+            <div class="contact-detail">
+              <div class="contact-detail-icon"><svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg></div>
+              <div class="contact-detail-text">
+                <strong>Instagram</strong>
+                @ws.interiordesign
+              </div>
+            </div>
+          </div>
+
+          <div class="reveal reveal-delay-4">
+            <a href="https://wa.me/6281234567890?text=Halo%20WS%20Interior%2C%20saya%20ingin%20konsultasi%20desain%20interior" target="_blank" class="btn-whatsapp">
+              <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+              Chat di WhatsApp
+            </a>
+          </div>
+        </div>
+
+        <div>
+          <form class="contact-form reveal reveal-delay-1" id="contactForm" onsubmit="handleSubmit(event)">
+            <div class="form-row">
+              <div class="form-field">
+                <label for="nama">Nama Lengkap</label>
+                <input type="text" id="nama" name="nama" placeholder="Nama Anda" required />
+              </div>
+              <div class="form-field">
+                <label for="telepon">No. WhatsApp</label>
+                <input type="tel" id="telepon" name="telepon" placeholder="+62 8xx xxxx xxxx" />
+              </div>
+            </div>
+            <div class="form-field">
+              <label for="email">Email</label>
+              <input type="email" id="email" name="email" placeholder="email@anda.com" />
+            </div>
+            <div class="form-field">
+              <label for="layanan">Layanan yang Diminati</label>
+              <select id="layanan" name="layanan">
+                <option value="">Pilih layanan...</option>
+                <option>Desain Interior</option>
+                <option>Build & Renovasi</option>
+                <option>Konsultasi Interior</option>
+                <option>3D Visualisasi</option>
+                <option>Paket Lengkap (Design + Build)</option>
+              </select>
+            </div>
+            <div class="form-field">
+              <label for="pesan">Ceritakan Kebutuhan Anda</label>
+              <textarea id="pesan" name="pesan" placeholder="Ruangan apa yang ingin Anda desain? Budget range? Timeline?"></textarea>
+            </div>
+            <button type="submit" class="form-submit">
+              <span>Kirim Pesan</span>
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer id="footer">
+    <div class="section-inner">
+      <div class="footer-top">
+        <div class="footer-brand">
+          <a href="#" class="nav-logo">WS <span>Interior</span></a>
+          <p>Studio desain interior premium Jakarta–Bogor. Mengubah setiap ruang menjadi karya seni yang fungsional dan elegan sejak 2015.</p>
+          <div class="footer-social">
+            <a href="https://instagram.com/ws.interiordesign" target="_blank" class="social-link" title="Instagram">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5" stroke-linecap="round"/></svg>
+            </a>
+            <a href="mailto:wdnbuild@gmail.com" class="social-link" title="Email">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            </a>
+            <a href="https://wa.me/6281234567890" target="_blank" class="social-link" title="WhatsApp">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+            </a>
+          </div>
+        </div>
+
+        <div class="footer-col">
+          <h4>Layanan</h4>
+          <ul>
+            <li><a href="#services">Desain Interior</a></li>
+            <li><a href="#services">Build & Renovasi</a></li>
+            <li><a href="#services">Konsultasi Interior</a></li>
+            <li><a href="#services">3D Visualisasi</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Navigasi</h4>
+          <ul>
+            <li><a href="#about">Tentang Kami</a></li>
+            <li><a href="#portfolio">Portfolio</a></li>
+            <li><a href="#why-us">Keunggulan</a></li>
+            <li><a href="#testimonials">Testimoni</a></li>
+            <li><a href="#contact">Kontak</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Kontak</h4>
+          <ul>
+            <li><a href="mailto:wdnbuild@gmail.com">wdnbuild@gmail.com</a></li>
+            <li><a href="https://instagram.com/ws.interiordesign">@ws.interiordesign</a></li>
+            <li><a href="#">Jakarta — Bogor</a></li>
+            <li><a href="#">Est. 2015</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <p class="footer-copy">
+          © 2025 <span>WS Interior Design & Build</span>. All rights reserved.
+        </p>
+        <div class="footer-legal">
+          <a href="#">Privacy Policy</a>
+          <a href="#">Terms of Service</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- FLOATING WHATSAPP -->
+  <div id="wa-float">
+    <div class="wa-tooltip">Chat dengan kami sekarang</div>
+    <a href="https://wa.me/6281234567890?text=Halo%20WS%20Interior%2C%20saya%20ingin%20konsultasi" target="_blank" class="wa-btn">
+      <div class="wa-pulse"></div>
+      <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+    </a>
+  </div>
+
+  <!-- ─── SCRIPTS ─── -->
+  <script>
+  (function() {
+    'use strict';
+
+    // ─── GSAP SETUP ───
+    gsap.registerPlugin(ScrollTrigger);
+
+    // ─── CUSTOM CURSOR ───
+    const dot  = document.getElementById('cursor-dot');
+    const ring = document.getElementById('cursor-ring');
+    let mouseX = 0, mouseY = 0;
+    let ringX  = 0, ringY  = 0;
+
+    document.addEventListener('mousemove', e => {
+      mouseX = e.clientX;
+      mouseY = e.clientY;
+      gsap.set(dot, { x: mouseX, y: mouseY });
+    });
+
+    (function animateRing() {
+      ringX += (mouseX - ringX) * 0.1;
+      ringY += (mouseY - ringY) * 0.1;
+      gsap.set(ring, { x: ringX, y: ringY });
+      requestAnimationFrame(animateRing);
+    })();
+
+    document.querySelectorAll('a, button, .filter-btn, .portfolio-item, .service-card').forEach(el => {
+      el.addEventListener('mouseenter', () => document.body.classList.add('cursor-hover'));
+      el.addEventListener('mouseleave', () => document.body.classList.remove('cursor-hover'));
+    });
+
+    // ─── LOADER ───
+    const loader     = document.getElementById('loader');
+    const loaderLogo = loader.querySelector('.loader-logo');
+    const loaderTag  = loader.querySelector('.loader-tagline');
+    const loaderBar  = document.getElementById('loaderBar');
+    const loaderWrap = loader.querySelector('.loader-bar-wrap');
+
+    const tl = gsap.timeline({
+      onComplete: () => {
+        gsap.to(loader, {
+          opacity: 0,
+          duration: 0.8,
+          ease: 'power2.inOut',
+          onComplete: () => {
+            loader.style.display = 'none';
+            document.body.classList.remove('loading');
+            startHeroAnimation();
+          }
+        });
+      }
+    });
+
+    tl.to(loaderLogo,  { opacity: 1, y: 0, duration: 0.7, ease: 'power3.out' })
+      .to(loaderTag,   { opacity: 1, y: 0, duration: 0.5, ease: 'power2.out' }, '-=0.3')
+      .to(loaderWrap,  { opacity: 1, duration: 0.3 }, '-=0.1')
+      .to(loaderBar,   { width: '100%', duration: 1.4, ease: 'power2.inOut' }, '-=0.1')
+      .to([loaderLogo, loaderTag, loaderWrap], { opacity: 0, y: -20, duration: 0.5, stagger: 0.05, ease: 'power2.in' }, '+=0.2');
+
+    // ─── HERO TEXT REVEAL ───
+    const heroWords = ['Your', 'Design', 'to', 'be', 'Possible'];
+    const heroTitle = document.getElementById('heroTitle');
+
+    heroWords.forEach(word => {
+      const wrap  = document.createElement('span');
+      wrap.className = 'word-wrap';
+      const inner = document.createElement('span');
+      inner.className = 'word';
+      inner.textContent = word;
+      wrap.appendChild(inner);
+      heroTitle.appendChild(wrap);
+    });
+
+    function startHeroAnimation() {
+      const eyebrow = document.querySelector('.hero-eyebrow-inner');
+      const words   = document.querySelectorAll('.word');
+      const subInner = document.querySelector('.hero-subtitle-inner');
+      const actions  = document.getElementById('heroActions');
+      const scrollHint = document.getElementById('heroScrollHint');
+
+      const htl = gsap.timeline({ defaults: { ease: 'power4.out' } });
+
+      htl.to(eyebrow, { y: 0, opacity: 1, duration: 0.8 })
+         .to(words,   { y: 0, opacity: 1, duration: 0.9, stagger: 0.1 }, '-=0.4')
+         .to(subInner, { y: 0, opacity: 1, duration: 0.8 }, '-=0.3')
+         .to(actions,  { y: 0, opacity: 1, duration: 0.7 }, '-=0.4')
+         .to(scrollHint, { opacity: 1, duration: 0.6 }, '-=0.2');
+    }
+
+    // ─── MARQUEE SETUP ───
+    const items = [
+      'Desain Interior', 'Build & Renovasi', 'Konsultasi', '3D Visualisasi',
+      'Jakarta · Bogor', 'Est. 2015', 'Premium Quality', 'Your Design to be Possible'
+    ];
+
+    const track = document.getElementById('marqueeTrack');
+    const html = items.map(t => `<span class="marquee-item"><span class="marquee-dot"></span>${t}</span>`).join('');
+    track.innerHTML = html + html; // duplicate for seamless loop
+
+    // ─── NAV SCROLL BEHAVIOR ───
+    const nav = document.getElementById('nav');
+    const navLinks = document.querySelectorAll('.nav-links a');
+
+    function updateNav() {
+      if (window.scrollY > 60) {
+        nav.classList.add('scrolled');
+      } else {
+        nav.classList.remove('scrolled');
+      }
+
+      // Active link highlighting
+      const sections = document.querySelectorAll('section[id]');
+      let current = '';
+      sections.forEach(s => {
+        if (window.scrollY >= s.offsetTop - 100) current = s.id;
+      });
+      navLinks.forEach(a => {
+        a.classList.remove('active');
+        if (a.getAttribute('href') === '#' + current) a.classList.add('active');
+      });
+    }
+
+    window.addEventListener('scroll', updateNav, { passive: true });
+    updateNav();
+
+    // ─── HAMBURGER ───
+    const hamburger  = document.getElementById('hamburger');
+    const mobileMenu = document.getElementById('mobileMenu');
+    let menuOpen = false;
+
+    hamburger.addEventListener('click', () => {
+      menuOpen = !menuOpen;
+      if (menuOpen) {
+        mobileMenu.classList.add('open');
+        hamburger.children[0].style.transform = 'rotate(45deg) translate(4px, 4px)';
+        hamburger.children[1].style.opacity = '0';
+        hamburger.children[2].style.transform = 'rotate(-45deg) translate(4px, -4px)';
+      } else {
+        closeMobile();
+      }
+    });
+
+    window.closeMobile = function() {
+      menuOpen = false;
+      mobileMenu.classList.remove('open');
+      hamburger.children[0].style.transform = '';
+      hamburger.children[1].style.opacity = '';
+      hamburger.children[2].style.transform = '';
+    };
+
+    // ─── SMOOTH SCROLL ───
+    document.querySelectorAll('a[href^="#"]').forEach(a => {
+      a.addEventListener('click', e => {
+        const target = document.querySelector(a.getAttribute('href'));
+        if (!target) return;
+        e.preventDefault();
+        const offsetTop = target.getBoundingClientRect().top + window.scrollY - 80;
+        gsap.to(window, {
+          scrollTo: { y: offsetTop, autoKill: false },
+          duration: 1.4,
+          ease: 'power3.inOut'
+        });
+      });
+    });
+
+    // GSAP ScrollToPlugin polyfill (native)
+    // Using native smooth scroll since ScrollTo plugin isn't loaded
+    document.querySelectorAll('a[href^="#"]').forEach(link => {
+      link.addEventListener('click', e => {
+        const href = link.getAttribute('href');
+        const target = document.querySelector(href);
+        if (!target) return;
+        e.preventDefault();
+        const y = target.getBoundingClientRect().top + window.scrollY - 80;
+        window.scrollTo({ top: y, behavior: 'smooth' });
+      });
+    });
+
+    // ─── HERO PARALLAX ───
+    const heroBg = document.getElementById('heroBg');
+    gsap.to(heroBg, {
+      yPercent: 30,
+      ease: 'none',
+      scrollTrigger: {
+        trigger: '#hero',
+        start: 'top top',
+        end: 'bottom top',
+        scrub: true
+      }
+    });
+
+    // ─── PARALLAX BANNER ───
+    const bannerBg = document.getElementById('parallaxBanner');
+    if (bannerBg) {
+      gsap.to(bannerBg, {
+        yPercent: 20,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: '.parallax-banner',
+          start: 'top bottom',
+          end: 'bottom top',
+          scrub: true
+        }
+      });
+    }
+
+    // ─── SCROLL REVEAL (Intersection Observer) ───
+    const revealEls = document.querySelectorAll('.reveal, .reveal-left, .reveal-right');
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -60px 0px' });
+
+    revealEls.forEach(el => observer.observe(el));
+
+    // ─── COUNTER ANIMATION ───
+    const counters = document.querySelectorAll('.count');
+    let countersStarted = false;
+
+    const counterObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting && !countersStarted) {
+          countersStarted = true;
+          counters.forEach(counter => {
+            const target = parseInt(counter.dataset.target);
+            const duration = 2000;
+            const startTime = performance.now();
+
+            function update(currentTime) {
+              const elapsed = currentTime - startTime;
+              const progress = Math.min(elapsed / duration, 1);
+              // Ease out
+              const eased = 1 - Math.pow(1 - progress, 3);
+              counter.textContent = Math.floor(eased * target);
+              if (progress < 1) requestAnimationFrame(update);
+              else counter.textContent = target;
+            }
+
+            requestAnimationFrame(update);
+          });
+          counterObserver.disconnect();
+        }
+      });
+    }, { threshold: 0.5 });
+
+    const statsSection = document.getElementById('stats');
+    if (statsSection) counterObserver.observe(statsSection);
+
+    // ─── PORTFOLIO FILTER ───
+    const filterBtns = document.querySelectorAll('.filter-btn');
+    const portfolioItems = document.querySelectorAll('.portfolio-item');
+
+    filterBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        filterBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+
+        const filter = btn.dataset.filter;
+
+        portfolioItems.forEach((item, i) => {
+          const cat = item.dataset.category;
+          const show = filter === 'all' || cat === filter;
+
+          if (show) {
+            item.classList.remove('hidden');
+            gsap.fromTo(item,
+              { opacity: 0, scale: 0.96 },
+              { opacity: 1, scale: 1, duration: 0.5, delay: i * 0.06, ease: 'power2.out' }
+            );
+          } else {
+            gsap.to(item, {
+              opacity: 0, scale: 0.95, duration: 0.35, ease: 'power2.in',
+              onComplete: () => item.classList.add('hidden')
+            });
+          }
+        });
+      });
+    });
+
+    // ─── CONTACT FORM ───
+    window.handleSubmit = function(e) {
+      e.preventDefault();
+      const btn = e.target.querySelector('.form-submit span');
+      btn.textContent = 'Mengirim...';
+
+      setTimeout(() => {
+        btn.textContent = 'Pesan Terkirim ✓';
+        e.target.reset();
+        setTimeout(() => { btn.textContent = 'Kirim Pesan'; }, 3000);
+      }, 1500);
+    };
+
+    // ─── STAGGER SECTION ANIMATIONS via GSAP ScrollTrigger ───
+    // About images
+    gsap.from('.about-img-main', {
+      scale: 1.08,
+      duration: 1.4,
+      ease: 'power2.out',
+      scrollTrigger: { trigger: '#about', start: 'top 80%' }
+    });
+
+    gsap.from('.about-img-accent', {
+      scale: 1.1,
+      x: 20,
+      duration: 1.4,
+      delay: 0.2,
+      ease: 'power2.out',
+      scrollTrigger: { trigger: '#about', start: 'top 80%' }
+    });
+
+    // Service cards stagger
+    gsap.from('.service-card', {
+      y: 40,
+      opacity: 0,
+      duration: 0.8,
+      stagger: 0.12,
+      ease: 'power3.out',
+      scrollTrigger: { trigger: '.services-grid', start: 'top 85%' }
+    });
+
+    // Portfolio items stagger
+    gsap.from('.portfolio-item', {
+      y: 30,
+      opacity: 0,
+      duration: 0.7,
+      stagger: 0.08,
+      ease: 'power3.out',
+      scrollTrigger: { trigger: '.portfolio-grid', start: 'top 85%' }
+    });
+
+    // Testimonial cards
+    gsap.from('.testimonial-card', {
+      y: 40,
+      opacity: 0,
+      duration: 0.8,
+      stagger: 0.15,
+      ease: 'power3.out',
+      scrollTrigger: { trigger: '.testimonials-grid', start: 'top 85%' }
+    });
+
+    // Why items
+    gsap.from('.why-item', {
+      x: 30,
+      opacity: 0,
+      duration: 0.7,
+      stagger: 0.12,
+      ease: 'power3.out',
+      scrollTrigger: { trigger: '.why-items', start: 'top 85%' }
+    });
+
+    // Footer brand
+    gsap.from('.footer-top > div', {
+      y: 30,
+      opacity: 0,
+      duration: 0.7,
+      stagger: 0.1,
+      ease: 'power2.out',
+      scrollTrigger: { trigger: '#footer', start: 'top 90%' }
+    });
+
+    // ─── SECTION DIVIDER LINES ───
+    gsap.utils.toArray('.section-label').forEach(el => {
+      gsap.from(el, {
+        width: 0,
+        opacity: 0,
+        duration: 0.6,
+        ease: 'power2.out',
+        scrollTrigger: { trigger: el, start: 'top 90%' }
+      });
+    });
+
+  })();
+  </script>
+
+</body>
+</html>
