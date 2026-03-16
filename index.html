@@ -918,42 +918,22 @@
       background: var(--taupe);
     }
 
-    /* First item spans wide for visual anchor */
-    .portfolio-item:nth-child(1) { grid-column: span 7; grid-row: span 2; aspect-ratio: auto; }
-    .portfolio-item:nth-child(2) { grid-column: span 5; }
-    .portfolio-item:nth-child(3) { grid-column: span 5; }
-    /* Remaining items: balanced 4-col layout */
-    .portfolio-item:nth-child(4)  { grid-column: span 4; }
-    .portfolio-item:nth-child(5)  { grid-column: span 4; }
-    .portfolio-item:nth-child(6)  { grid-column: span 4; }
-    .portfolio-item:nth-child(7)  { grid-column: span 6; }
-    .portfolio-item:nth-child(8)  { grid-column: span 6; }
-    .portfolio-item:nth-child(9)  { grid-column: span 4; }
-    .portfolio-item:nth-child(10) { grid-column: span 4; }
-    .portfolio-item:nth-child(11) { grid-column: span 4; }
-    .portfolio-item:nth-child(12) { grid-column: span 6; }
-    .portfolio-item:nth-child(13) { grid-column: span 6; }
-    .portfolio-item:nth-child(14) { grid-column: span 4; }
-    .portfolio-item:nth-child(15) { grid-column: span 4; }
-    .portfolio-item:nth-child(16) { grid-column: span 4; }
-    .portfolio-item:nth-child(17) { grid-column: span 6; }
-    .portfolio-item:nth-child(18) { grid-column: span 6; }
-    .portfolio-item:nth-child(19) { grid-column: span 4; }
-    .portfolio-item:nth-child(20) { grid-column: span 4; }
-    .portfolio-item:nth-child(21) { grid-column: span 4; }
-    .portfolio-item:nth-child(22) { grid-column: span 6; }
-    .portfolio-item:nth-child(23) { grid-column: span 6; }
-    .portfolio-item:nth-child(24) { grid-column: span 4; }
-    .portfolio-item:nth-child(25) { grid-column: span 4; }
-    .portfolio-item:nth-child(26) { grid-column: span 4; }
-    .portfolio-item:nth-child(27) { grid-column: span 6; }
-    .portfolio-item:nth-child(28) { grid-column: span 6; }
-    .portfolio-item:nth-child(29) { grid-column: span 4; }
-    .portfolio-item:nth-child(30) { grid-column: span 4; }
-    .portfolio-item:nth-child(31) { grid-column: span 4; }
-    .portfolio-item:nth-child(32) { grid-column: span 6; }
-    .portfolio-item:nth-child(33) { grid-column: span 6; }
+      .portfolio-item:nth-child(1)  { grid-column: span 7; grid-row: span 2; }
+      .portfolio-item:nth-child(2)  { grid-column: span 5; }
+      .portfolio-item:nth-child(3)  { grid-column: span 5; }
+      .portfolio-item:nth-child(4)  { grid-column: span 4; }
+      .portfolio-item:nth-child(5)  { grid-column: span 4; }
+      .portfolio-item:nth-child(6)  { grid-column: span 4; }
+      .portfolio-item:nth-child(7)  { grid-column: span 6; }
+      .portfolio-item:nth-child(8)  { grid-column: span 6; }
+      .portfolio-item:nth-child(9)  { grid-column: span 4; }
+      .portfolio-item:nth-child(10) { grid-column: span 4; }
+      .portfolio-item:nth-child(11) { grid-column: span 4; }
+      .portfolio-item:nth-child(12) { grid-column: span 12; }
 
+
+    /* First item spans wide for visual anchor */
+    /* Remaining items: balanced 4-col layout */
     .portfolio-item.hidden {
       display: none;
     }
@@ -1920,7 +1900,7 @@
         <div class="portfolio-filters reveal">
           <button class="filter-btn active" data-filter="all">Semua</button>
           <button class="filter-btn" data-filter="bedroom">Bedroom</button>
-          <button class="filter-btn" data-filter="living">Living Room</button>
+          <button class="filter-btn" data-filter="dining">Dining Room</button>
           <button class="filter-btn" data-filter="kitchen">Kitchen</button>
           <button class="filter-btn" data-filter="dining">Dining</button>
           <button class="filter-btn" data-filter="wardrobe">Wardrobe</button>
@@ -1934,7 +1914,7 @@
         <div class="portfolio-item" data-category="living">
           <img class="portfolio-img" src="img/real_dining.jpg" alt="Living Room Modern WS Interior" loading="lazy" />
           <div class="portfolio-overlay">
-            <div class="portfolio-tag">Living Room</div>
+            <div class="portfolio-tag">Dining Room</div>
             <div class="portfolio-name">Residensial Bogor Hills</div>
           </div>
         </div>
@@ -1942,7 +1922,7 @@
         <div class="portfolio-item" data-category="living">
           <img class="portfolio-img" src="img/real_bedroom1.jpg" alt="Living Room Elegant WS Interior" loading="lazy" />
           <div class="portfolio-overlay">
-            <div class="portfolio-tag">Living Room</div>
+            <div class="portfolio-tag">Dining Room</div>
             <div class="portfolio-name">Apartemen Sudirman</div>
           </div>
         </div>
@@ -1950,7 +1930,7 @@
         <div class="portfolio-item" data-category="living">
           <img class="portfolio-img" src="img/real_kitchen.jpg" alt="Living Room Contemporary WS Interior" loading="lazy" />
           <div class="portfolio-overlay">
-            <div class="portfolio-tag">Living Room</div>
+            <div class="portfolio-tag">Dining Room</div>
             <div class="portfolio-name">Ruang Keluarga BSD City</div>
           </div>
         </div>
@@ -1958,7 +1938,7 @@
         <div class="portfolio-item" data-category="living">
           <img class="portfolio-img" src="img/real_theater.jpg" alt="Living Room Minimalist WS Interior" loading="lazy" />
           <div class="portfolio-overlay">
-            <div class="portfolio-tag">Living Room</div>
+            <div class="portfolio-tag">Dining Room</div>
             <div class="portfolio-name">Villa Sentul Premium</div>
           </div>
         </div>
@@ -1966,7 +1946,7 @@
         <div class="portfolio-item" data-category="living">
           <img class="portfolio-img" src="img/real_theater.jpg" alt="Living Room Luxury WS Interior" loading="lazy" />
           <div class="portfolio-overlay">
-            <div class="portfolio-tag">Living Room</div>
+            <div class="portfolio-tag">Dining Room</div>
             <div class="portfolio-name">Townhouse Kemang</div>
           </div>
         </div>
@@ -1974,7 +1954,7 @@
         <div class="portfolio-item" data-category="living">
           <img class="portfolio-img" src="img/real_theater.jpg" alt="Living Room Classic WS Interior" loading="lazy" />
           <div class="portfolio-overlay">
-            <div class="portfolio-tag">Living Room</div>
+            <div class="portfolio-tag">Dining Room</div>
             <div class="portfolio-name">Residensial Cinere</div>
           </div>
         </div>
@@ -1982,7 +1962,7 @@
         <div class="portfolio-item" data-category="living">
           <img class="portfolio-img" src="img/real_theater.jpg" alt="Living Room Modern Classic WS Interior" loading="lazy" />
           <div class="portfolio-overlay">
-            <div class="portfolio-tag">Living Room</div>
+            <div class="portfolio-tag">Dining Room</div>
             <div class="portfolio-name">Perumahan Cibubur</div>
           </div>
         </div>
@@ -1990,7 +1970,7 @@
         <div class="portfolio-item" data-category="living">
           <img class="portfolio-img" src="img/real_kitchen.jpg" alt="Living Room Open Plan WS Interior" loading="lazy" />
           <div class="portfolio-overlay">
-            <div class="portfolio-tag">Living Room</div>
+            <div class="portfolio-tag">Dining Room</div>
             <div class="portfolio-name">Apartemen Kelapa Gading</div>
           </div>
         </div>
@@ -2857,4 +2837,102 @@
   </script>
 
 </body>
-</html>
+</html><div class="portfolio-grid">
+
+          <div class="portfolio-item reveal" data-category="dining">
+            <img class="portfolio-img" src="img/real_dining.jpg" alt="Ruang Makan Modern" loading="lazy" />
+            <div class="portfolio-overlay">
+              <span class="portfolio-tag">Dining Room</span>
+              <h3 class="portfolio-name">Ruang Makan Modern</h3>
+            </div>
+          </div>
+
+          <div class="portfolio-item reveal" data-category="bedroom">
+            <img class="portfolio-img" src="img/real_bedroom1.jpg" alt="Master Bedroom Elegant" loading="lazy" />
+            <div class="portfolio-overlay">
+              <span class="portfolio-tag">Bedroom</span>
+              <h3 class="portfolio-name">Master Bedroom Elegant</h3>
+            </div>
+          </div>
+
+          <div class="portfolio-item reveal" data-category="kitchen">
+            <img class="portfolio-img" src="img/real_kitchen.jpg" alt="Dapur Modern Minimalis" loading="lazy" />
+            <div class="portfolio-overlay">
+              <span class="portfolio-tag">Kitchen</span>
+              <h3 class="portfolio-name">Dapur Modern Minimalis</h3>
+            </div>
+          </div>
+
+          <div class="portfolio-item reveal" data-category="theater">
+            <img class="portfolio-img" src="img/real_theater.jpg" alt="Home Theater Premium" loading="lazy" />
+            <div class="portfolio-overlay">
+              <span class="portfolio-tag">Home Theater</span>
+              <h3 class="portfolio-name">Home Theater Premium</h3>
+            </div>
+          </div>
+
+          <div class="portfolio-item reveal" data-category="bedroom">
+            <img class="portfolio-img" src="img/real_bedroom2.jpg" alt="Kamar Tidur Luxury" loading="lazy" />
+            <div class="portfolio-overlay">
+              <span class="portfolio-tag">Bedroom</span>
+              <h3 class="portfolio-name">Kamar Tidur Luxury</h3>
+            </div>
+          </div>
+
+          <div class="portfolio-item reveal" data-category="kitchen">
+            <img class="portfolio-img" src="img/real_kitchen.jpg" alt="Kitchen Island Design" loading="lazy" />
+            <div class="portfolio-overlay">
+              <span class="portfolio-tag">Kitchen</span>
+              <h3 class="portfolio-name">Kitchen Island Design</h3>
+            </div>
+          </div>
+
+          <div class="portfolio-item reveal" data-category="dining">
+            <img class="portfolio-img" src="img/real_dining.jpg" alt="Dining Area Minimalis" loading="lazy" />
+            <div class="portfolio-overlay">
+              <span class="portfolio-tag">Dining Room</span>
+              <h3 class="portfolio-name">Dining Area Minimalis</h3>
+            </div>
+          </div>
+
+          <div class="portfolio-item reveal" data-category="bedroom">
+            <img class="portfolio-img" src="img/real_bedroom1.jpg" alt="Bedroom Contemporary" loading="lazy" />
+            <div class="portfolio-overlay">
+              <span class="portfolio-tag">Bedroom</span>
+              <h3 class="portfolio-name">Bedroom Contemporary</h3>
+            </div>
+          </div>
+
+          <div class="portfolio-item reveal" data-category="theater">
+            <img class="portfolio-img" src="img/real_theater.jpg" alt="Private Cinema Room" loading="lazy" />
+            <div class="portfolio-overlay">
+              <span class="portfolio-tag">Home Theater</span>
+              <h3 class="portfolio-name">Private Cinema Room</h3>
+            </div>
+          </div>
+
+          <div class="portfolio-item reveal" data-category="bedroom">
+            <img class="portfolio-img" src="img/real_bedroom2.jpg" alt="Kamar Tidur Premium" loading="lazy" />
+            <div class="portfolio-overlay">
+              <span class="portfolio-tag">Bedroom</span>
+              <h3 class="portfolio-name">Kamar Tidur Premium</h3>
+            </div>
+          </div>
+
+          <div class="portfolio-item reveal" data-category="kitchen">
+            <img class="portfolio-img" src="img/real_kitchen.jpg" alt="Dapur Bersih Modern" loading="lazy" />
+            <div class="portfolio-overlay">
+              <span class="portfolio-tag">Kitchen</span>
+              <h3 class="portfolio-name">Dapur Bersih Modern</h3>
+            </div>
+          </div>
+
+          <div class="portfolio-item reveal" data-category="dining">
+            <img class="portfolio-img" src="img/real_dining.jpg" alt="Ruang Makan Elegan" loading="lazy" />
+            <div class="portfolio-overlay">
+              <span class="portfolio-tag">Dining Room</span>
+              <h3 class="portfolio-name">Ruang Makan Elegan</h3>
+            </div>
+          </div>
+
+        
